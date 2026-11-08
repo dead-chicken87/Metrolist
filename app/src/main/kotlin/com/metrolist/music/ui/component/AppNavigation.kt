@@ -23,6 +23,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.unit.dp
+import com.kyant.backdrop.Backdrop
+import com.kyant.backdrop.drawBackdrop
+import com.kyant.backdrop.effects.blur
+import com.kyant.backdrop.effects.vibrancy
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalViewConfiguration
@@ -134,19 +140,37 @@ fun AppNavigationBar(
     currentRoute: String?,
     onItemClick: (Screens, Boolean) -> Unit,
     modifier: Modifier = Modifier,
+    backdrop: Backdrop? = null,
     pureBlack: Boolean = false,
     slimNav: Boolean = false,
     onSearchLongClick: (() -> Unit)? = null,
     onHomeLongHold: (() -> Unit)? = null,
 ) {
     val containerColor = if (pureBlack) Color.Black else MaterialTheme.colorScheme.surfaceContainer
+    val glassTint = containerColor.copy(alpha = 0.55f)
+    val barModifier =
+        if (backdrop != null) {
+            modifier.drawBackdrop(
+                backdrop = backdrop,
+                shape = { RectangleShape },
+                effects = {
+                    vibrancy()
+                    blur(16.dp.toPx())
+                },
+                highlight = null,
+                shadow = null,
+                onDrawSurface = { drawRect(glassTint) },
+            )
+        } else {
+            modifier
+        }
     val contentColor = if (pureBlack) Color.White else MaterialTheme.colorScheme.onSurfaceVariant
     val haptics = LocalHapticFeedback.current
     val viewConfiguration = LocalViewConfiguration.current
 
     NavigationBar(
-        modifier = modifier,
-        containerColor = containerColor,
+        modifier = barModifier,
+        containerColor = if (backdrop != null) Color.Transparent else containerColor,
         contentColor = contentColor
     ) {
         navigationItems.forEach { screen ->

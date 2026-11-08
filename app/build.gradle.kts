@@ -281,6 +281,7 @@ dependencies {
     implementation(libs.ucrop)
 
     implementation(libs.shimmer)
+    implementation(libs.backdrop)
 
     implementation(libs.media3)
     implementation(libs.media3.session)

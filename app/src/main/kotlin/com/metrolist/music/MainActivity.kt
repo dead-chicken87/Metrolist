@@ -181,6 +181,8 @@ import com.metrolist.music.playback.PlayerConnection
 import com.metrolist.music.playback.queues.YouTubeQueue
 import com.metrolist.music.ui.component.AccountSettingsDialog
 import com.metrolist.music.ui.component.AppNavigationBar
+import com.kyant.backdrop.backdrops.layerBackdrop
+import com.kyant.backdrop.backdrops.rememberLayerBackdrop
 import com.metrolist.music.ui.component.AppNavigationRail
 import com.metrolist.music.ui.component.BottomSheetMenu
 import com.metrolist.music.ui.component.BottomSheetPage
@@ -1050,6 +1052,8 @@ class MainActivity : FragmentActivity() {
                         ChangelogScreen(onDismiss = { showChangelog.value = false })
                     }
 
+                    val glassBackdrop = rememberLayerBackdrop()
+
                     Scaffold(
                         snackbarHost = { SnackbarHost(snackbarHostState) },
                         topBar = {
@@ -1215,6 +1219,7 @@ class MainActivity : FragmentActivity() {
                                         navigationItems = navigationItems,
                                         currentRoute = currentRoute,
                                         onItemClick = onNavItemClick,
+                                        backdrop = glassBackdrop,
                                         pureBlack = pureBlack,
                                         slimNav = slimNav,
                                         onSearchLongClick = onSearchLongClick,
@@ -1338,7 +1343,7 @@ class MainActivity : FragmentActivity() {
                                     onHomeLongHold = { showAccountDialog = true },
                                 )
                             }
-                            Box(Modifier.weight(1f)) {
+                            Box(Modifier.weight(1f).layerBackdrop(glassBackdrop)) {
                                 // NavHost with animations (Material 3 Expressive style)
                                 NavHost(
                                     navController = navController,
